@@ -162,10 +162,11 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite & { of: Software[] } }) {
         <p className="text-sm">
           {rewrite.description.split(" ").map((word, i) => {
             const software = rewrite.of.find((s) =>
-              new RegExp(`[\'\"]?${s.name}[\'\"\,\.\(1\)]*$`, "i").test(word)
+              new RegExp(`['"’\`]?${s.name}['"’\`,\.\(1\)]*$`, "i").test(word)
             );
 
             if (!software) return `${word} `;
+
             return (
               <HoverCard key={i}>
                 <HoverCardTrigger className="font-semibold hover:underline">
@@ -189,7 +190,7 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite & { of: Software[] } }) {
                         href={software.github}
                         className="flex gap-1 text-slate-500 hover:underline"
                       >
-                        <ExternalLink className="h-5 w-5" />
+                        <Github className="h-5 w-5" />
                         <span>{software.github}</span>
                       </a>
                     )}
@@ -208,7 +209,7 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite & { of: Software[] } }) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <ExternalLink className="h-4 w-4" />
-              <span>{rewrite.url.replace(/(https?:\/\/)?(www)?\./, "")}</span>
+              <span>{rewrite.url.replace(/(https?:\/\/)?(www)?/, "")}</span>
             </a>
           )}
           {rewrite.github && (

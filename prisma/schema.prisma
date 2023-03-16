@@ -71,18 +71,15 @@ model Software {
 }
 
 model Rewrite {
-  name         String   @id
-  description  String
-  url          String?
-  github       String?
-  crates       String?
-  of           Software @relation(fields: [softwareName], references: [name])
-  softwareName String
-  hits         Int      @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@index([softwareName])
+  name        String     @id
+  description String
+  url         String?
+  github      String?
+  crates      String?
+  of          Software[]
+  hits        Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 model Example {

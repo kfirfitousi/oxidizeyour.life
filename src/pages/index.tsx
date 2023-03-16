@@ -11,11 +11,16 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { Cog, Github, ExternalLink, Box } from "lucide-react";
 import Image from "next/image";
-import { Rewrite } from "@prisma/client";
+import { Rewrite, Software } from "@prisma/client";
 
 const Home: NextPage = () => {
   const rewritesList = api.rewrites.getList.useQuery();
@@ -87,17 +92,20 @@ const Home: NextPage = () => {
                   <CommandGroup>
                     {rewritesList.data?.map((rewrite) => (
                       <Link href={`/${rewrite.name}`} key={rewrite.name}>
-                        {" "}
-                        <CommandItem className="flex cursor-pointer items-center gap-2">
-                          <Cog className="h-5 w-5" />
-                          <span className="font-semibold">{rewrite.name}</span>
-                          <span className="font-light">
+                        <CommandItem className="grid cursor-pointer grid-cols-[min-content_1fr_max-content]">
+                          <div className="flex gap-1 place-self-start text-slate-700">
+                            <Cog className="h-5 w-5" />
+                            <span className="font-semibold">
+                              {rewrite.name}
+                            </span>
+                          </div>
+                          <span className="wrap-ellipsis overflow-hidden pl-2 font-light text-slate-600">
                             {rewrite.description}
                           </span>
-                          <span className="ml-auto">
-                            <span className="font-light">rewrite of </span>
-                            <span className="font-semibold">
-                              {rewrite.of.name}
+                          <span className="ml-auto place-self-start font-light text-slate-600">
+                            rewrite of{" "}
+                            <span className="font-semibold text-slate-700">
+                              {rewrite.of.map((s) => s.name).join(", ")}
                             </span>
                           </span>
                         </CommandItem>
@@ -138,7 +146,7 @@ const Home: NextPage = () => {
 
 export default Home;
 
-function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
+function RewriteCard({ rewrite }: { rewrite: Rewrite & { of: Software[] } }) {
   return (
     <div
       className="aspect-video w-full p-2 sm:aspect-square"
@@ -151,7 +159,46 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
         >
           {rewrite.name}
         </Link>
-        <p className="text-sm">{rewrite.description}</p>
+        <p className="text-sm">
+          {rewrite.description.split(" ").map((word, i) => {
+            const software = rewrite.of.find((s) =>
+              new RegExp(`[\'\"]?${s.name}[\'\"\,\.\(1\)]*$`, "i").test(word)
+            );
+
+            if (!software) return `${word} `;
+            return (
+              <HoverCard key={i}>
+                <HoverCardTrigger className="font-semibold hover:underline">
+                  {word}
+                </HoverCardTrigger>{" "}
+                <HoverCardContent>
+                  <div className="flex flex-col text-slate-600">
+                    <p className="text-lg font-semibold">{software.name}</p>
+                    <p className="pb-2">{software.description}</p>
+                    {software.url && (
+                      <a
+                        href={software.url}
+                        className="flex gap-1 text-slate-500 hover:underline"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        <span>{software.url}</span>
+                      </a>
+                    )}
+                    {software.github && (
+                      <a
+                        href={software.github}
+                        className="flex gap-1 text-slate-500 hover:underline"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        <span>{software.github}</span>
+                      </a>
+                    )}
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            );
+          })}
+        </p>
         <div className="mt-auto flex flex-col">
           {rewrite.url && (
             <a
@@ -161,7 +208,7 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <ExternalLink className="h-4 w-4" />
-              <span>{rewrite.url}</span>
+              <span>{rewrite.url.replace(/(https?:\/\/)?(www)?\./, "")}</span>
             </a>
           )}
           {rewrite.github && (
@@ -172,7 +219,12 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <Github className="h-4 w-4" />
-              <span>{rewrite.github}</span>
+              <span>
+                {rewrite.github.replace(
+                  /(https?:\/\/)?(www)?\.?github\.com\//,
+                  ""
+                )}
+              </span>
             </a>
           )}
           {rewrite.crates && (
@@ -183,7 +235,12 @@ function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <Box className="h-4 w-4" />
-              <span>{rewrite.crates}</span>
+              <span>
+                {rewrite.crates.replace(
+                  /(https?:\/\/)?(www)?\.?crates\.io\/crates\//,
+                  ""
+                )}
+              </span>
             </a>
           )}
         </div>

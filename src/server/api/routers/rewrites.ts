@@ -22,6 +22,9 @@ export const rewritesRouter = createTRPCRouter({
         hits: "desc",
       },
       take: 8,
+      include: {
+        of: true,
+      },
     });
   }),
   getNewest: publicProcedure.query(({ ctx }) => {
@@ -30,6 +33,9 @@ export const rewritesRouter = createTRPCRouter({
         createdAt: "desc",
       },
       take: 8,
+      include: {
+        of: true,
+      },
     });
   }),
   getAll: publicProcedure.query(({ ctx }) => {

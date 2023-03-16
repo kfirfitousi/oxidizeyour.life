@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-
 import { api } from "@/utils/api";
 import {
   Command,
@@ -34,11 +33,14 @@ const Home: NextPage = () => {
       <main className="grid min-h-screen grid-rows-[min-content_1fr]">
         <section className="grid h-full grid-cols-[1fr_minmax(0,1024px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
           <nav className="col-start-2 flex items-center justify-between py-4">
-            <Link href="/" className="text-lg font-bold sm:text-2xl">
+            <Link
+              href="/"
+              className="text-lg font-bold hover:text-slate-100 sm:text-2xl"
+            >
               rustrewrite.it
             </Link>
             <button
-              className=""
+              className="hover:text-slate-100"
               onClick={sessionData ? () => void signOut() : () => void signIn()}
             >
               <div className="flex items-center gap-2">
@@ -62,14 +64,14 @@ const Home: NextPage = () => {
               </div>
             </button>
           </nav>
-          <section className="col-start-2 flex flex-col items-center justify-center gap-4 pb-8">
-            <h1 className="text-2xl font-bold sm:text-4xl">
+          <section className="col-start-2 flex flex-col items-center justify-center gap-2 pb-8">
+            <h1 className="text-2xl font-extrabold sm:text-4xl">
               Rewrite it in Rust
             </h1>
-            <h2 className="text-center text-lg sm:text-2xl">
+            <h2 className="pb-4 text-lg sm:text-2xl">
               A collection of software rewritten in Rust
             </h2>
-            <Command className="relative max-w-2xl overflow-visible">
+            <Command className="relative max-w-xl overflow-visible">
               <CommandInput
                 placeholder="Search..."
                 value={input}

@@ -47,7 +47,10 @@ const Home: NextPage = () => {
                 {sessionData ? (
                   <>
                     <Image
-                      src={sessionData.user.image || ""}
+                      src={
+                        sessionData.user.image ||
+                        "https://avatars.githubusercontent.com/u/0"
+                      }
                       alt={sessionData.user.name || ""}
                       className="rounded-full"
                       width={24}

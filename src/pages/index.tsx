@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/command";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { Cog, Github } from "lucide-react";
+import { Cog, Github, ExternalLink, Box } from "lucide-react";
 import Image from "next/image";
+import { Rewrite } from "@prisma/client";
 
 const Home: NextPage = () => {
   const rewritesList = api.rewrites.getList.useQuery();
@@ -68,10 +69,10 @@ const Home: NextPage = () => {
             </button>
           </nav>
           <section className="col-start-2 flex flex-col items-center justify-center gap-2 pb-8">
-            <h1 className="text-2xl font-extrabold sm:text-4xl">
+            <h1 className="text-2xl font-bold sm:text-3xl md:text-4xl">
               Rewrite it in Rust
             </h1>
-            <h2 className="pb-4 text-lg sm:text-2xl">
+            <h2 className="pb-4 text-center text-lg sm:text-xl md:text-2xl">
               A collection of software rewritten in Rust
             </h2>
             <Command className="relative max-w-xl overflow-visible">
@@ -86,6 +87,7 @@ const Home: NextPage = () => {
                   <CommandGroup>
                     {rewritesList.data?.map((rewrite) => (
                       <Link href={`/${rewrite.name}`} key={rewrite.name}>
+                        {" "}
                         <CommandItem className="flex cursor-pointer items-center gap-2">
                           <Cog className="h-5 w-5" />
                           <span className="font-semibold">{rewrite.name}</span>
@@ -114,32 +116,16 @@ const Home: NextPage = () => {
               <TabsTrigger value="newest">New</TabsTrigger>
             </TabsList>
             <TabsContent value="popular" className="border-none p-0">
-              <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-3 lg:grid-cols-5">
+              <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {popular.data?.map((rewrite) => (
-                  <div className="h-48 w-full p-2" key={rewrite.name}>
-                    <Link
-                      href={`/${rewrite.name}`}
-                      className="block h-full w-full rounded border-slate-400 bg-slate-200 p-4 hover:border"
-                    >
-                      <h2>{rewrite.name}</h2>
-                      <p className="text-sm">{rewrite.description}</p>
-                    </Link>
-                  </div>
+                  <RewriteCard rewrite={rewrite} key={rewrite.name} />
                 ))}
               </div>
             </TabsContent>
             <TabsContent value="newest" className="border-none p-0">
-              <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-3 lg:grid-cols-5">
+              <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {newest.data?.map((rewrite) => (
-                  <div className="h-48 w-full p-2" key={rewrite.name}>
-                    <Link
-                      href={`/${rewrite.name}`}
-                      className="block h-full w-full rounded border-slate-400 bg-slate-200 p-4 hover:border"
-                    >
-                      <h2>{rewrite.name}</h2>
-                      <p className="text-sm">{rewrite.description}</p>
-                    </Link>
-                  </div>
+                  <RewriteCard rewrite={rewrite} key={rewrite.name} />
                 ))}
               </div>
             </TabsContent>
@@ -151,3 +137,57 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+function RewriteCard({ rewrite }: { rewrite: Rewrite }) {
+  return (
+    <div
+      className="aspect-video w-full p-2 sm:aspect-square"
+      key={rewrite.name}
+    >
+      <div className="block flex h-full flex-col rounded bg-slate-200 p-4 text-slate-700">
+        <Link
+          href={`/${rewrite.name}`}
+          className="text-lg font-semibold hover:underline"
+        >
+          {rewrite.name}
+        </Link>
+        <p className="text-sm">{rewrite.description}</p>
+        <div className="mt-auto flex flex-col">
+          {rewrite.url && (
+            <a
+              href={rewrite.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+            >
+              <ExternalLink className="h-4 w-4" />
+              <span>{rewrite.url}</span>
+            </a>
+          )}
+          {rewrite.github && (
+            <a
+              href={rewrite.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+            >
+              <Github className="h-4 w-4" />
+              <span>{rewrite.github}</span>
+            </a>
+          )}
+          {rewrite.crates && (
+            <a
+              href={rewrite.crates}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+            >
+              <Box className="h-4 w-4" />
+              <span>{rewrite.crates}</span>
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

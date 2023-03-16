@@ -1,4 +1,4 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+const { fontFamily, screens } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 const config = {
@@ -8,6 +8,10 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },
+    },
+    screens: {
+      xs: "480px",
+      ...screens,
     },
   },
   plugins: [],

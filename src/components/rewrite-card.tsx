@@ -7,6 +7,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import {
+  formatCratesUrl,
+  formatGithubUrl,
+  formatUrl,
+} from "@/utils/format-url";
 
 type RewriteCardProps = {
   rewrite: Rewrite & { of: Software[] };
@@ -72,7 +77,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <ExternalLink className="h-4 w-4" />
-              <span>{rewrite.url.replace(/(https?:\/\/)?(www)?/, "")}</span>
+              <span>{formatUrl(rewrite.url)}</span>
             </a>
           )}
           {rewrite.github && (
@@ -83,12 +88,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <Github className="h-4 w-4" />
-              <span>
-                {rewrite.github.replace(
-                  /(https?:\/\/)?(www)?\.?github\.com\//,
-                  ""
-                )}
-              </span>
+              <span>{formatGithubUrl(rewrite.github)}</span>
             </a>
           )}
           {rewrite.crates && (
@@ -99,12 +99,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
             >
               <Box className="h-4 w-4" />
-              <span>
-                {rewrite.crates.replace(
-                  /(https?:\/\/)?(www)?\.?crates\.io\/crates\//,
-                  ""
-                )}
-              </span>
+              <span>{formatCratesUrl(rewrite.crates)}</span>
             </a>
           )}
         </div>

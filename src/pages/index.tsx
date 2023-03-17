@@ -41,22 +41,22 @@ const Home: NextPage = () => {
               <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {popular.data
                   ? popular.data?.map((rewrite) => (
-                      <RewriteCard rewrite={rewrite} key={rewrite.name} />
-                    ))
+                    <RewriteCard rewrite={rewrite} key={rewrite.name} />
+                  ))
                   : Array.from({ length: 8 }, (_, i) => (
-                      <RewriteCardSkeleton key={i} />
-                    ))}
+                    <RewriteCardSkeleton key={i} />
+                  ))}
               </div>
             </TabsContent>
             <TabsContent value="newest" className="border-none p-0">
               <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {newest.data
                   ? newest.data?.map((rewrite) => (
-                      <RewriteCard rewrite={rewrite} key={rewrite.name} />
-                    ))
+                    <RewriteCard rewrite={rewrite} key={rewrite.name} />
+                  ))
                   : Array.from({ length: 8 }, (_, i) => (
-                      <RewriteCardSkeleton key={i} />
-                    ))}
+                    <RewriteCardSkeleton key={i} />
+                  ))}
               </div>
             </TabsContent>
           </Tabs>

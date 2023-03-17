@@ -19,7 +19,7 @@ export function Header({ children }: HeaderProps) {
         >
           rewriteit
         </Link>
-        <div className="w-full px-8">{children}</div>
+        <div className="w-full px-4">{children}</div>
         <button
           className="hover:text-slate-100"
           onClick={sessionData ? () => void signOut() : () => void signIn()}

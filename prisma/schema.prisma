@@ -74,10 +74,10 @@ model Rewrite {
   name        String     @id
   description String
   url         String?
-  github      String?
+  github      String
   crates      String?
   of          Software[]
-  hits        Int        @default(0)
+  views       Int        @default(0)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }

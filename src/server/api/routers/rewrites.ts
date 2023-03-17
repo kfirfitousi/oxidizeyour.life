@@ -19,7 +19,7 @@ export const rewritesRouter = createTRPCRouter({
   getPopular: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.rewrite.findMany({
       orderBy: {
-        hits: "desc",
+        views: "desc",
       },
       take: 8,
       include: {
@@ -58,6 +58,24 @@ export const rewritesRouter = createTRPCRouter({
         },
         include: {
           of: true,
+        },
+      });
+    }),
+  incrementViews: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.rewrite.update({
+        where: {
+          name: input.name,
+        },
+        data: {
+          views: {
+            increment: 1,
+          },
         },
       });
     }),

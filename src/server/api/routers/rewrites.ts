@@ -86,7 +86,7 @@ export const rewritesRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         url: z.string().optional(),
-        github: z.string().optional(),
+        github: z.string(),
         crates: z.string().optional(),
       })
     )

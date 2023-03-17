@@ -4,7 +4,6 @@ import { createOAuthAppAuth } from "@octokit/auth-oauth-app";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkGfm from "remark-gfm";
 import rehypePrettyCode from "rehype-pretty-code";
-import rehypeHighlight from "rehype-highlight";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 

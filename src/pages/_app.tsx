@@ -1,7 +1,7 @@
 import type { AppType } from "next/app";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { Inter } from "next/font/google";
+import { Roboto_Slab } from "next/font/google";
 
 import { api } from "@/utils/api";
 import { cn } from "@/utils/classnames";
@@ -9,7 +9,7 @@ import { cn } from "@/utils/classnames";
 import "@/styles/globals.css";
 import "@/styles/markdown.css";
 
-const fontSans = Inter({
+const fontSans = Roboto_Slab({
   subsets: ["latin"],
   variable: "--font-sans",
 });

@@ -1,9 +1,6 @@
 import { z } from "zod";
 import { Octokit } from "@octokit/rest";
 import { createOAuthAppAuth } from "@octokit/auth-oauth-app";
-import { serialize } from "next-mdx-remote/serialize";
-import remarkGfm from "remark-gfm";
-import rehypePrettyCode from "rehype-pretty-code";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
@@ -24,22 +21,15 @@ export const githubRouter = createTRPCRouter({
       })
     )
     .query(async ({ input }) => {
-      const { data } = await octokit.rest.repos.getReadme({
+      const { data: readme } = await octokit.rest.repos.getReadme({
         owner: input.owner,
         repo: input.repo,
       });
-      return serialize(Buffer.from(data.content, "base64").toString(), {
-        mdxOptions: {
-          remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            [
-              rehypePrettyCode,
-              {
-                theme: "github-dark",
-              },
-            ],
-          ],
-        },
+      const { data } = await octokit.markdown.render({
+        text: Buffer.from(readme.content, "base64").toString(),
+        mode: "gfm",
+        context: input.owner + "/" + input.repo,
       });
+      return data;
     }),
 });

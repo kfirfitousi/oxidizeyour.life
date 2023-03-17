@@ -1,14 +1,13 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { MDXRemote } from "next-mdx-remote";
 
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
 import { api } from "@/utils/api";
 
 export const config = {
-  unstable_includeFiles: ["node_modules/.pnpm/**/shiki/**/*.json"],
+  includeFiles: ["node_modules/.pnpm/**/shiki/**/*.json"],
 };
 
 const RewritePage: NextPage = () => {
@@ -53,7 +52,14 @@ const RewritePage: NextPage = () => {
         </section>
         <section className="min-h-full w-screen bg-slate-300 p-6 sm:p-12">
           <div className="prose prose-slate mx-auto max-w-3xl">
-            {readme.data && <MDXRemote {...readme.data}></MDXRemote>}
+            {rewrite.data && !rewrite.data.github && <p>No README found.</p>}
+            {readme.isLoading ? (
+              <p>Loading...</p>
+            ) : readme.isError ? (
+              <p>Error: {readme.error.message}</p>
+            ) : (
+              <section dangerouslySetInnerHTML={{ __html: readme.data }} />
+            )}
           </div>
         </section>
       </main>

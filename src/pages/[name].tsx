@@ -5,7 +5,7 @@ import Head from "next/head";
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
 import { api } from "@/utils/api";
-import { Box, ExternalLink, Github } from "lucide-react";
+import { Box, ExternalLink, Github, Loader2 } from "lucide-react";
 import {
   formatCratesUrl,
   formatGithubUrl,
@@ -49,55 +49,65 @@ const RewritePage: NextPage = () => {
       </Header>
       <main className="grid min-h-screen grid-rows-[min-content_1fr]">
         <section className="grid h-full grid-cols-[1fr_minmax(0,800px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
-          <section className="col-start-2 flex flex-col gap-2 py-8">
-            <h1 className="place-self-start text-2xl font-bold sm:text-3xl">
-              {rewrite.data?.name}
-            </h1>
-            <h2 className="col-span-2 text-lg sm:text-xl">
-              {rewrite.data?.description}
-            </h2>
-            <div className="flex gap-4 whitespace-nowrap text-slate-400">
-              {rewrite.data?.url && (
-                <a
-                  href={rewrite.data.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-slate-100 hover:underline"
-                >
-                  <ExternalLink className="h-5 w-5" />
-                  <span>{formatUrl(rewrite.data.url)}</span>
-                </a>
-              )}
-              {rewrite.data?.github && (
-                <a
-                  href={rewrite.data.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-slate-100 hover:underline"
-                >
-                  <Github className="h-5 w-5" />
-                  <span>{formatGithubUrl(rewrite.data.github)}</span>
-                </a>
-              )}
-              {rewrite.data?.crates && (
-                <a
-                  href={rewrite.data.crates}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1 hover:text-slate-100 hover:underline"
-                >
-                  <Box className="h-5 w-5" />
-                  <span>{formatCratesUrl(rewrite.data.crates)}</span>
-                </a>
-              )}
-            </div>
+          <section className="col-start-2 flex flex-col gap-2 py-10">
+            {!rewrite.data ? (
+              <>
+                <div className="h-8 w-20 animate-pulse rounded-sm bg-slate-500/80" />
+                <div className="h-8 w-96 animate-pulse rounded-sm bg-slate-500/80 delay-200" />
+                <div className="h-6 w-32 animate-pulse rounded-sm bg-slate-400/80 delay-500" />
+              </>
+            ) : (
+              <>
+                <h1 className="text-2xl font-bold sm:text-3xl">
+                  {rewrite.data.name}
+                </h1>
+                <h2 className="text-lg sm:text-xl">
+                  {rewrite.data.description}
+                </h2>
+                <div className="flex gap-4 whitespace-nowrap text-slate-400">
+                  {rewrite.data.url && (
+                    <a
+                      href={rewrite.data.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-slate-100 hover:underline"
+                    >
+                      <ExternalLink className="h-5 w-5" />
+                      <span>{formatUrl(rewrite.data.url)}</span>
+                    </a>
+                  )}
+                  {rewrite.data.github && (
+                    <a
+                      href={rewrite.data.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-slate-100 hover:underline"
+                    >
+                      <Github className="h-5 w-5" />
+                      <span>{formatGithubUrl(rewrite.data.github)}</span>
+                    </a>
+                  )}
+                  {rewrite.data.crates && (
+                    <a
+                      href={rewrite.data.crates}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-slate-100 hover:underline"
+                    >
+                      <Box className="h-5 w-5" />
+                      <span>{formatCratesUrl(rewrite.data.crates)}</span>
+                    </a>
+                  )}
+                </div>
+              </>
+            )}
           </section>
         </section>
         <section className="min-h-full w-screen bg-slate-300 p-6 sm:p-12">
           <div className="prose prose-slate mx-auto max-w-3xl">
             {rewrite.data && !rewrite.data.github && <p>No README found.</p>}
             {readme.isLoading ? (
-              <p>Loading...</p>
+              <Loader2 className="mx-auto h-10 w-10 animate-spin" />
             ) : readme.isError ? (
               <p>Error: {readme.error.message}</p>
             ) : (

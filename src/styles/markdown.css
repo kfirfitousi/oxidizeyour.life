@@ -1,0 +1,25 @@
+pre {
+  @apply !my-0 !p-0;
+}
+
+pre > code {
+  @apply !overflow-x-auto !p-4;
+}
+
+code {
+  font-weight: revert !important;
+  @apply rounded !py-0 !px-1;
+}
+
+code::before,
+code::after {
+  @apply !content-none;
+}
+
+code {
+  @apply inline-block bg-slate-400;
+}
+
+pre > code {
+  @apply grid;
+}

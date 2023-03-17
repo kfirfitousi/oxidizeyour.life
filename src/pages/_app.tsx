@@ -4,9 +4,10 @@ import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 
 import { api } from "@/utils/api";
+import { cn } from "@/utils/classnames";
 
 import "@/styles/globals.css";
-import { cn } from "@/utils/classnames";
+import "@/styles/markdown.css";
 
 const fontSans = Inter({
   subsets: ["latin"],

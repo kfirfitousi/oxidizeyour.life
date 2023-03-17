@@ -14,7 +14,7 @@ const config = {
       ...screens,
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
   darkMode: ["class", "[data-theme='dark']"],
 };
 

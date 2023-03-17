@@ -64,7 +64,7 @@ const RewritePage: NextPage = () => {
                 <h2 className="text-lg sm:text-xl">
                   {rewrite.data.description}
                 </h2>
-                <div className="flex gap-4 whitespace-nowrap text-slate-400">
+                <div className="flex flex-wrap gap-4 text-slate-400">
                   {rewrite.data.url && (
                     <a
                       href={rewrite.data.url}

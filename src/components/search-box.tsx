@@ -41,7 +41,7 @@ export function SearchBox({ small }: SearchBoxProps) {
         className={cn(small ? "h-8" : "h-auto")}
         onValueChange={(value) => setInput(value)}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => setTimeout(() => setIsFocused(false), 100)}
       />
       {isFocused && (
         <CommandList

@@ -7,6 +7,10 @@ import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
 import { api } from "@/utils/api";
 
+export const config = {
+  unstable_includeFiles: ["node_modules/.pnpm/**/shiki/**/*.json"],
+};
+
 const RewritePage: NextPage = () => {
   const { query } = useRouter();
 

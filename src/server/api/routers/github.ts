@@ -31,7 +31,14 @@ export const githubRouter = createTRPCRouter({
       return serialize(Buffer.from(data.content, "base64").toString(), {
         mdxOptions: {
           remarkPlugins: [remarkGfm],
-          rehypePlugins: [rehypePrettyCode],
+          rehypePlugins: [
+            [
+              rehypePrettyCode,
+              {
+                theme: "github-dark",
+              },
+            ],
+          ],
         },
       });
     }),

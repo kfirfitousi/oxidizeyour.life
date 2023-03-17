@@ -106,14 +106,16 @@ const RewritePage: NextPage = () => {
         <section className="min-h-full w-screen bg-slate-300 p-6 sm:p-12">
           <div className="prose prose-slate mx-auto max-w-3xl">
             {rewrite && !rewrite.github && <p>No README found.</p>}
-            {rewrite &&
-              (readme.isLoading ? (
-                <Loader2 className="mx-auto h-10 w-10 animate-spin" />
-              ) : readme.isError ? (
-                <p>Error: {readme.error.message}</p>
-              ) : (
-                <section dangerouslySetInnerHTML={{ __html: readme.data }} />
-              ))}
+            {readme.isLoading ? (
+              <Loader2 className="mx-auto h-10 w-10 animate-spin" />
+            ) : readme.isError ? (
+              <p>Error: {readme.error.message}</p>
+            ) : (
+              <section
+                // TODO: find a better way to do this
+                dangerouslySetInnerHTML={{ __html: readme.data ?? "" }}
+              />
+            )}
           </div>
         </section>
       </main>

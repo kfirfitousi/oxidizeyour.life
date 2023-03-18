@@ -17,7 +17,7 @@ export function Header({ children }: HeaderProps) {
           href="/"
           className="text-lg font-bold hover:text-slate-100 sm:text-2xl"
         >
-          rewriteit
+          oxidizeyour.life
         </Link>
         <div className="w-full px-4">{children}</div>
         <button

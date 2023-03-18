@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Rewrite it in Rust</title>
+        <title>Oxidize Your Life</title>
         <meta
           name="description"
           content="A collection of software alternatives written in Rust."
@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         <section className="grid h-full grid-cols-[1fr_minmax(0,1024px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
           <section className="col-start-2 flex flex-col items-center justify-center gap-2 pb-8">
             <h1 className="text-2xl font-bold sm:text-3xl md:text-4xl">
-              Rewrite it in Rust
+              Oxidize Your Life
             </h1>
             <h2 className="pb-4 text-center text-lg sm:text-xl md:text-2xl">
               A collection of software alternatives written in Rust

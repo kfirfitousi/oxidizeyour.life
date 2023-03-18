@@ -54,7 +54,7 @@ const RewritePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Rewrite it in Rust - {rewrite?.name}</title>
+        <title>Oxidize Your Life - {rewrite?.name}</title>
         <meta
           name="description"
           content={`${rewrite?.name || ""} - ${rewrite?.description || ""}`}

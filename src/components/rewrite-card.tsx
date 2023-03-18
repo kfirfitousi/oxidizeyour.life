@@ -19,8 +19,6 @@ type RewriteCardProps = {
 };
 
 export function RewriteCard({ rewrite }: RewriteCardProps) {
-  const re = new RegExp(`(${rewrite.of.map((s) => s.name).join(")|(")})`, "gi");
-
   return (
     <div className="w-full p-2 max-xs:min-h-fit sm:aspect-square">
       <div className="flex h-full flex-col gap-1 rounded bg-slate-200 p-4 text-slate-700">
@@ -32,7 +30,9 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
         </Link>
         <div className="font-light">
           {rewrite.description
-            .split(re)
+            .split(
+              new RegExp(`(${rewrite.of.map((s) => s.name).join(")|(")})`, "gi")
+            )
             .filter(Boolean)
             .map((word, i) => {
               const software = rewrite.of.find(

@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import { useEffect } from "react";
 
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
@@ -19,7 +20,11 @@ import {
   formatGitlabUrl,
   formatUrl,
 } from "@/utils/format-url";
-import { useEffect } from "react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const RewritePage: NextPage = () => {
   const { query } = useRouter();
@@ -65,7 +70,7 @@ const RewritePage: NextPage = () => {
       </Header>
       <main className="grid min-h-screen grid-rows-[min-content_1fr]">
         <section className="grid h-full grid-cols-[1fr_minmax(0,800px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
-          <section className="col-start-2 flex flex-col gap-2 py-10">
+          <section className="col-start-2 flex flex-col gap-4 py-8">
             {!rewrite ? (
               <>
                 <div className="h-8 w-28 animate-pulse rounded-sm bg-slate-500/80" />
@@ -77,7 +82,65 @@ const RewritePage: NextPage = () => {
                 <h1 className="text-2xl font-bold sm:text-3xl">
                   {rewrite.name}
                 </h1>
-                <h2 className="text-lg sm:text-xl">{rewrite.description}</h2>
+                <h2 className="text-lg font-light sm:text-xl">
+                  {rewrite.description
+                    .split(
+                      new RegExp(
+                        `(${rewrite.of.map((s) => s.name).join(")|(")})`,
+                        "gi"
+                      )
+                    )
+                    .filter(Boolean)
+                    .map((word, i) => {
+                      const software = rewrite.of.find(
+                        (s) => s.name.toLowerCase() === word.toLowerCase()
+                      );
+
+                      if (!software) return word;
+
+                      return (
+                        <HoverCard key={i}>
+                          <HoverCardTrigger className="font-normal hover:underline">
+                            {word}
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            <div className="flex flex-col text-base text-slate-600">
+                              <div className="text-lg font-semibold">
+                                {software.name}
+                              </div>
+                              <div className="pb-2">{software.description}</div>
+                              {software.url && (
+                                <a
+                                  href={software.url}
+                                  className="flex gap-1 text-slate-500 hover:underline"
+                                >
+                                  <ExternalLink
+                                    className="h-5 w-5"
+                                    aria-label="URL"
+                                  />
+                                  <span>{formatUrl(software.url)}</span>
+                                </a>
+                              )}
+                              {software.github && (
+                                <a
+                                  href={software.github}
+                                  className="flex gap-1 text-slate-500 hover:underline"
+                                >
+                                  <Github
+                                    className="h-5 w-5"
+                                    aria-label="GitHub"
+                                  />
+                                  <span>
+                                    {formatGithubUrl(software.github)}
+                                  </span>
+                                </a>
+                              )}
+                            </div>
+                          </HoverCardContent>
+                        </HoverCard>
+                      );
+                    })}
+                </h2>
                 <div className="flex flex-wrap gap-4 text-slate-300/75">
                   {rewrite.url && (
                     <a

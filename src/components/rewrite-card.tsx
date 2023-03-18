@@ -19,25 +19,25 @@ type RewriteCardProps = {
 
 export function RewriteCard({ rewrite }: RewriteCardProps) {
   return (
-    <div className="aspect-video w-full p-2 sm:aspect-square">
-      <div className="block flex h-full flex-col rounded bg-slate-200 p-4 text-slate-700">
+    <div className="w-full p-2 max-xs:min-h-fit sm:aspect-square">
+      <div className="block flex h-full flex-col gap-1 rounded bg-slate-200 p-4 text-slate-700">
         <Link
           href={`/${rewrite.name}`}
-          className="text-lg font-semibold hover:underline"
+          className="text-xl font-semibold hover:underline"
         >
           {rewrite.name}
         </Link>
-        <p className="text-sm">
+        <p className="font-light">
           {rewrite.description.split(" ").map((word, i) => {
             const software = rewrite.of.find((s) =>
-              new RegExp(`['"’\`]?${s.name}['"’\`,\.\(1\)]*$`, "i").test(word)
+              new RegExp(`^['"‘\`\(\[]?${s.name}`, "i").test(word)
             );
 
             if (!software) return `${word} `;
 
             return (
               <HoverCard key={i}>
-                <HoverCardTrigger className="font-semibold hover:underline">
+                <HoverCardTrigger className="font-normal hover:underline">
                   {word}
                 </HoverCardTrigger>{" "}
                 <HoverCardContent>

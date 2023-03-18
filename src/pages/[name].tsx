@@ -50,9 +50,9 @@ const RewritePage: NextPage = () => {
           <section className="col-start-2 flex flex-col gap-2 py-10">
             {!rewrite ? (
               <>
-                <div className="h-8 w-20 animate-pulse rounded-sm bg-slate-500/80" />
-                <div className="h-8 w-96 animate-pulse rounded-sm bg-slate-500/80 delay-200" />
-                <div className="h-6 w-32 animate-pulse rounded-sm bg-slate-400/80 delay-500" />
+                <div className="h-8 w-28 animate-pulse rounded-sm bg-slate-500/80" />
+                <div className="h-8 w-[36rem] max-w-full animate-pulse rounded-sm bg-slate-500/80" />
+                <div className="h-6 w-96 animate-pulse rounded-sm bg-slate-400/80" />
               </>
             ) : (
               <>

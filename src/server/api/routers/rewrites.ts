@@ -87,6 +87,7 @@ export const rewritesRouter = createTRPCRouter({
         description: z.string(),
         url: z.string().optional(),
         github: z.string(),
+        gitlab: z.string().optional(),
         crates: z.string().optional(),
       })
     )
@@ -97,6 +98,7 @@ export const rewritesRouter = createTRPCRouter({
           description: input.description,
           url: input.url,
           github: input.github,
+          gitlab: input.gitlab,
           crates: input.crates,
           of: {
             connect: {

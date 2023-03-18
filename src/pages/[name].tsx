@@ -5,10 +5,18 @@ import Head from "next/head";
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
 import { api } from "@/utils/api";
-import { Box, ExternalLink, Flame, Github, Loader2 } from "lucide-react";
+import {
+  Box,
+  ExternalLink,
+  Flame,
+  Github,
+  Gitlab,
+  Loader2,
+} from "lucide-react";
 import {
   formatCratesUrl,
   formatGithubUrl,
+  formatGitlabUrl,
   formatUrl,
 } from "@/utils/format-url";
 import { useEffect } from "react";
@@ -81,6 +89,17 @@ const RewritePage: NextPage = () => {
                     >
                       <Github className="h-5 w-5" />
                       <span>{formatGithubUrl(rewrite.github)}</span>
+                    </a>
+                  )}
+                  {rewrite.gitlab && (
+                    <a
+                      href={rewrite.gitlab}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 hover:text-slate-100 hover:underline"
+                    >
+                      <Gitlab className="h-5 w-5" />
+                      <span>{formatGitlabUrl(rewrite.gitlab)}</span>
                     </a>
                   )}
                   {rewrite.crates && (

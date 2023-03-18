@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, ExternalLink, Box } from "lucide-react";
+import { Github, ExternalLink, Box, Gitlab } from "lucide-react";
 
 import type { Rewrite, Software } from "@prisma/client";
 import {
@@ -10,6 +10,7 @@ import {
 import {
   formatCratesUrl,
   formatGithubUrl,
+  formatGitlabUrl,
   formatUrl,
 } from "@/utils/format-url";
 
@@ -89,6 +90,17 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
             >
               <Github className="h-4 w-4" />
               <span>{formatGithubUrl(rewrite.github)}</span>
+            </a>
+          )}
+          {rewrite.gitlab && (
+            <a
+              href={rewrite.gitlab}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+            >
+              <Gitlab className="h-4 w-4" />
+              <span>{formatGitlabUrl(rewrite.gitlab)}</span>
             </a>
           )}
           {rewrite.crates && (

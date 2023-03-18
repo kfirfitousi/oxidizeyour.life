@@ -74,7 +74,8 @@ model Rewrite {
   name        String     @id
   description String
   url         String?
-  github      String
+  github      String?
+  gitlab      String?
   crates      String?
   of          Software[]
   views       Int        @default(0)

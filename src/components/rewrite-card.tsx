@@ -36,7 +36,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
             .filter(Boolean)
             .map((word, i) => {
               const software = rewrite.of.find(
-                (s) => s.name === word.toLowerCase()
+                (s) => s.name.toLowerCase() === word.toLowerCase()
               );
 
               if (!software) return word;

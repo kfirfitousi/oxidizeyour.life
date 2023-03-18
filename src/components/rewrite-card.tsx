@@ -58,7 +58,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
                           className="flex gap-1 text-slate-500 hover:underline"
                         >
                           <ExternalLink className="h-5 w-5" aria-label="URL" />
-                          <span>{software.url}</span>
+                          <span>{formatUrl(software.url)}</span>
                         </a>
                       )}
                       {software.github && (
@@ -67,7 +67,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
                           className="flex gap-1 text-slate-500 hover:underline"
                         >
                           <Github className="h-5 w-5" aria-label="GitHub" />
-                          <span>{software.github}</span>
+                          <span>{formatGithubUrl(software.github)}</span>
                         </a>
                       )}
                     </div>

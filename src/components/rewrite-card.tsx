@@ -55,18 +55,20 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
                       {software.url && (
                         <a
                           href={software.url}
-                          className="flex gap-1 text-slate-500 hover:underline"
+                          className="flex items-center gap-1 text-slate-500 hover:underline"
                         >
-                          <ExternalLink className="h-5 w-5" aria-label="URL" />
-                          <span>{formatUrl(software.url)}</span>
+                          <ExternalLink className="h-4 w-4" aria-label="URL" />
+                          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                            {formatUrl(software.url)}
+                          </span>
                         </a>
                       )}
                       {software.github && (
                         <a
                           href={software.github}
-                          className="flex gap-1 text-slate-500 hover:underline"
+                          className="flex items-center gap-1 text-slate-500 hover:underline"
                         >
-                          <Github className="h-5 w-5" aria-label="GitHub" />
+                          <Github className="h-4 w-4" aria-label="GitHub" />
                           <span>{formatGithubUrl(software.github)}</span>
                         </a>
                       )}

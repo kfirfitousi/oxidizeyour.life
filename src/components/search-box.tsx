@@ -31,13 +31,13 @@ export function SearchBox({ small }: SearchBoxProps) {
         small ? "max-w-lg" : "max-w-xl",
         small && !isFocused && "max-w-xs",
         small &&
-          isFocused &&
-          "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
+        isFocused &&
+        "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
       )}
     >
       <CommandInput
         value={input}
-        placeholder="Search..."
+        placeholder="Browse..."
         className={cn(small ? "h-8" : "h-auto")}
         onValueChange={(value) => setInput(value)}
         onFocus={() => setIsFocused(true)}

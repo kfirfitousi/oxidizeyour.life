@@ -21,14 +21,14 @@ type RewriteCardProps = {
 export function RewriteCard({ rewrite }: RewriteCardProps) {
   return (
     <div className="w-full p-2 max-xs:min-h-fit sm:aspect-square">
-      <div className="block flex h-full flex-col gap-1 rounded bg-slate-200 p-4 text-slate-700">
+      <div className="flex h-full flex-col gap-1 rounded bg-slate-200 p-4 text-slate-700">
         <Link
           href={`/${rewrite.name}`}
           className="text-xl font-semibold hover:underline"
         >
           {rewrite.name}
         </Link>
-        <p className="font-light">
+        <div className="font-light">
           {rewrite.description.split(" ").map((word, i) => {
             const software = rewrite.of.find((s) =>
               new RegExp(`^['"‘\`\(\[]?${s.name}`, "i").test(word)
@@ -43,14 +43,14 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
                 </HoverCardTrigger>{" "}
                 <HoverCardContent>
                   <div className="flex flex-col text-slate-600">
-                    <p className="text-lg font-semibold">{software.name}</p>
-                    <p className="pb-2">{software.description}</p>
+                    <div className="text-lg font-semibold">{software.name}</div>
+                    <div className="pb-2">{software.description}</div>
                     {software.url && (
                       <a
                         href={software.url}
                         className="flex gap-1 text-slate-500 hover:underline"
                       >
-                        <ExternalLink className="h-5 w-5" />
+                        <ExternalLink className="h-5 w-5" aria-hidden />
                         <span>{software.url}</span>
                       </a>
                     )}
@@ -59,7 +59,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
                         href={software.github}
                         className="flex gap-1 text-slate-500 hover:underline"
                       >
-                        <Github className="h-5 w-5" />
+                        <Github className="h-5 w-5" aria-hidden />
                         <span>{software.github}</span>
                       </a>
                     )}
@@ -68,16 +68,16 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               </HoverCard>
             );
           })}
-        </p>
-        <div className="mt-auto flex flex-col">
+        </div>
+        <div className="mt-auto flex flex-col pt-2 text-sm text-slate-600">
           {rewrite.url && (
             <a
               href={rewrite.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+              className="flex items-center gap-1 hover:underline"
             >
-              <ExternalLink className="h-4 w-4" />
+              <ExternalLink className="h-4 w-4" aria-hidden />
               <span>{formatUrl(rewrite.url)}</span>
             </a>
           )}
@@ -86,9 +86,9 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               href={rewrite.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+              className="flex items-center gap-1 hover:underline"
             >
-              <Github className="h-4 w-4" />
+              <Github className="h-4 w-4" aria-hidden />
               <span>{formatGithubUrl(rewrite.github)}</span>
             </a>
           )}
@@ -97,9 +97,9 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               href={rewrite.gitlab}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+              className="flex items-center gap-1 hover:underline"
             >
-              <Gitlab className="h-4 w-4" />
+              <Gitlab className="h-4 w-4" aria-hidden />
               <span>{formatGitlabUrl(rewrite.gitlab)}</span>
             </a>
           )}
@@ -108,9 +108,9 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
               href={rewrite.crates}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-slate-500 hover:underline"
+              className="flex items-center gap-1 hover:underline"
             >
-              <Box className="h-4 w-4" />
+              <Box className="h-4 w-4" aria-hidden />
               <span>{formatCratesUrl(rewrite.crates)}</span>
             </a>
           )}

@@ -37,12 +37,12 @@ export function Header({ children }: HeaderProps) {
                   width={24}
                   height={24}
                 />
-                <p>Sign out</p>
+                <span>Sign out</span>
               </>
             ) : (
               <>
-                <Github className="h-5 w-5" />
-                <p>Sign in</p>
+                <Github className="h-4 w-4" aria-hidden />
+                <span>Sign in</span>
               </>
             )}
           </div>

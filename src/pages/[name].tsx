@@ -24,13 +24,21 @@ import { useEffect } from "react";
 const RewritePage: NextPage = () => {
   const { query } = useRouter();
 
-  const { data: rewrite } = api.rewrites.getOne.useQuery({
-    name: query.name as string,
-  });
+  const { data: rewrite } = api.rewrites.getOne.useQuery(
+    {
+      name: query.name as string,
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
 
   const readme = api.github.getReadme.useQuery(
     { url: rewrite?.github as string },
-    { enabled: !!rewrite?.github }
+    {
+      enabled: !!rewrite?.github,
+      refetchOnWindowFocus: false,
+    }
   );
 
   const { mutate: incrementViews } = api.rewrites.incrementViews.useMutation();
@@ -68,7 +76,7 @@ const RewritePage: NextPage = () => {
                   {rewrite.name}
                 </h1>
                 <h2 className="text-lg sm:text-xl">{rewrite.description}</h2>
-                <div className="flex flex-wrap gap-4 text-slate-400">
+                <div className="flex flex-wrap gap-4 text-slate-300/75">
                   {rewrite.url && (
                     <a
                       href={rewrite.url}
@@ -76,7 +84,7 @@ const RewritePage: NextPage = () => {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
-                      <ExternalLink className="h-5 w-5" />
+                      <ExternalLink className="h-5 w-5" aria-label="URL" />
                       <span>{formatUrl(rewrite.url)}</span>
                     </a>
                   )}
@@ -87,7 +95,7 @@ const RewritePage: NextPage = () => {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
-                      <Github className="h-5 w-5" />
+                      <Github className="h-5 w-5" aria-label="GitHub" />
                       <span>{formatGithubUrl(rewrite.github)}</span>
                     </a>
                   )}
@@ -98,7 +106,7 @@ const RewritePage: NextPage = () => {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
-                      <Gitlab className="h-5 w-5" />
+                      <Gitlab className="h-5 w-5" aria-label="GitLab" />
                       <span>{formatGitlabUrl(rewrite.gitlab)}</span>
                     </a>
                   )}
@@ -109,12 +117,12 @@ const RewritePage: NextPage = () => {
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
-                      <Box className="h-5 w-5" />
+                      <Box className="h-5 w-5" aria-label="crates.io" />
                       <span>{formatCratesUrl(rewrite.crates)}</span>
                     </a>
                   )}
                   <div className="flex items-center gap-1">
-                    <Flame className="h-5 w-5" />
+                    <Flame className="h-5 w-5" aria-hidden />
                     <span>{rewrite.views} views</span>
                   </div>
                 </div>
@@ -126,7 +134,10 @@ const RewritePage: NextPage = () => {
           <div className="prose prose-slate mx-auto max-w-3xl">
             {rewrite && !rewrite.github && <p>No README found.</p>}
             {readme.isFetching ? (
-              <Loader2 className="mx-auto h-10 w-10 animate-spin" />
+              <Loader2
+                className="mx-auto h-10 w-10 animate-spin"
+                aria-label="Loading..."
+              />
             ) : readme.isError ? (
               <p>Error: {readme.error.message}</p>
             ) : (

@@ -112,6 +112,8 @@ const RewritePage: NextPage = () => {
                               {software.url && (
                                 <a
                                   href={software.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="flex gap-1 text-slate-500 hover:underline"
                                 >
                                   <ExternalLink
@@ -124,6 +126,8 @@ const RewritePage: NextPage = () => {
                               {software.github && (
                                 <a
                                   href={software.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
                                   className="flex gap-1 text-slate-500 hover:underline"
                                 >
                                   <Github

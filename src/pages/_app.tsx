@@ -2,6 +2,7 @@ import type { AppType } from "next/app";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { Roboto_Slab } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 
 import { api } from "@/utils/api";
 import { cn } from "@/utils/classnames";
@@ -23,6 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <div className={cn("contents font-sans", fontSans.variable)}>
         <Component {...pageProps} />
       </div>
+      <Analytics />
     </SessionProvider>
   );
 };

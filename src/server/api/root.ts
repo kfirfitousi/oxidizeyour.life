@@ -1,6 +1,6 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 import { softwareRouter } from "@/server/api/routers/software";
-import { rewritesRouter } from "@/server/api/routers/rewrites";
+import { alternativesRouter } from "@/server/api/routers/alternatives";
 import { githubRouter } from "@/server/api/routers/github";
 
 /**
@@ -10,7 +10,7 @@ import { githubRouter } from "@/server/api/routers/github";
  */
 export const appRouter = createTRPCRouter({
   software: softwareRouter,
-  rewrites: rewritesRouter,
+  alternatives: alternativesRouter,
   github: githubRouter,
 });
 

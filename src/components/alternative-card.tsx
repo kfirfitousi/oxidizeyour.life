@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, ExternalLink, Box, Gitlab } from "lucide-react";
+import { Github, ExternalLink, Box, Gitlab, ArrowRight } from "lucide-react";
 
 import type { Rewrite, Software } from "@prisma/client";
 import {
@@ -14,28 +14,37 @@ import {
   formatUrl,
 } from "@/utils/format-url";
 
-type RewriteCardProps = {
-  rewrite: Rewrite & { of: Software[] };
+type AlternativeCardProps = {
+  alternative: Rewrite & { of: Software[] };
 };
 
-export function RewriteCard({ rewrite }: RewriteCardProps) {
+export function AlternativeCard({ alternative }: AlternativeCardProps) {
   return (
     <div className="w-full p-2 max-xs:min-h-fit sm:aspect-square">
       <div className="flex h-full flex-col gap-1 rounded bg-slate-200 p-4 text-slate-700">
         <Link
-          href={`/${rewrite.name}`}
-          className="text-xl font-semibold hover:underline"
+          href={`/${alternative.name}`}
+          className="group flex w-full items-center justify-between"
         >
-          {rewrite.name}
+          <h2 className="text-xl font-semibold group-hover:underline">
+            {alternative.name}
+          </h2>
+          <ArrowRight
+            className="h-5 w-5 text-slate-400 group-hover:text-slate-700"
+            aria-hidden
+          />
         </Link>
         <div className="font-light">
-          {rewrite.description
+          {alternative.description
             .split(
-              new RegExp(`(${rewrite.of.map((s) => s.name).join(")|(")})`, "gi")
+              new RegExp(
+                `(${alternative.of.map((s) => s.name).join(")|(")})`,
+                "gi"
+              )
             )
             .filter(Boolean)
             .map((word, i) => {
-              const software = rewrite.of.find(
+              const software = alternative.of.find(
                 (s) => s.name.toLowerCase() === word.toLowerCase()
               );
 
@@ -83,48 +92,48 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
             })}
         </div>
         <div className="mt-auto flex flex-col pt-2 text-sm text-slate-600">
-          {rewrite.url && (
+          {alternative.url && (
             <a
-              href={rewrite.url}
+              href={alternative.url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 hover:underline"
             >
               <ExternalLink className="h-4 w-4" aria-hidden />
-              <span>{formatUrl(rewrite.url)}</span>
+              <span>{formatUrl(alternative.url)}</span>
             </a>
           )}
-          {rewrite.github && (
+          {alternative.github && (
             <a
-              href={rewrite.github}
+              href={alternative.github}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 hover:underline"
             >
               <Github className="h-4 w-4" aria-hidden />
-              <span>{formatGithubUrl(rewrite.github)}</span>
+              <span>{formatGithubUrl(alternative.github)}</span>
             </a>
           )}
-          {rewrite.gitlab && (
+          {alternative.gitlab && (
             <a
-              href={rewrite.gitlab}
+              href={alternative.gitlab}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 hover:underline"
             >
               <Gitlab className="h-4 w-4" aria-hidden />
-              <span>{formatGitlabUrl(rewrite.gitlab)}</span>
+              <span>{formatGitlabUrl(alternative.gitlab)}</span>
             </a>
           )}
-          {rewrite.crates && (
+          {alternative.crates && (
             <a
-              href={rewrite.crates}
+              href={alternative.crates}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 hover:underline"
             >
               <Box className="h-4 w-4" aria-hidden />
-              <span>{formatCratesUrl(rewrite.crates)}</span>
+              <span>{formatCratesUrl(alternative.crates)}</span>
             </a>
           )}
         </div>
@@ -133,7 +142,7 @@ export function RewriteCard({ rewrite }: RewriteCardProps) {
   );
 }
 
-export function RewriteCardSkeleton() {
+export function AlternativeCardSkeleton() {
   return (
     <div className="aspect-video w-full p-2 sm:aspect-square">
       <div className="h-full animate-pulse rounded bg-slate-200" />

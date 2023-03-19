@@ -2,10 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect } from "react";
-
-import { Header } from "@/components/header";
-import { SearchBox } from "@/components/search-box";
-import { api } from "@/utils/api";
 import {
   Box,
   ExternalLink,
@@ -14,22 +10,26 @@ import {
   Gitlab,
   Loader2,
 } from "lucide-react";
+
+import { Header } from "@/components/header";
+import { SearchBox } from "@/components/search-box";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import {
   formatCratesUrl,
   formatGithubUrl,
   formatGitlabUrl,
   formatUrl,
 } from "@/utils/format-url";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { api } from "@/utils/api";
 
-const RewritePage: NextPage = () => {
+const AlternativePage: NextPage = () => {
   const { query } = useRouter();
 
-  const { data: rewrite } = api.rewrites.getOne.useQuery(
+  const { data: alternative } = api.alternatives.getOne.useQuery(
     {
       name: query.name as string,
     },
@@ -39,30 +39,33 @@ const RewritePage: NextPage = () => {
   );
 
   const readme = api.github.getReadme.useQuery(
-    { url: rewrite?.github as string },
+    { url: alternative?.github as string },
     {
-      enabled: !!rewrite?.github,
+      enabled: !!alternative?.github,
       refetchOnWindowFocus: false,
     }
   );
 
-  const { mutate: incrementViews } = api.rewrites.incrementViews.useMutation();
+  const { mutate: incrementViews } =
+    api.alternatives.incrementViews.useMutation();
 
   useEffect(() => {
-    if (rewrite?.name) {
+    if (alternative?.name) {
       incrementViews({
-        name: rewrite.name,
+        name: alternative.name,
       });
     }
-  }, [rewrite?.name, incrementViews]);
+  }, [alternative?.name, incrementViews]);
 
   return (
     <>
       <Head>
-        <title>Oxidize Your Life - {rewrite?.name}</title>
+        <title>Oxidize Your Life - {alternative?.name}</title>
         <meta
           name="description"
-          content={`${rewrite?.name || ""} - ${rewrite?.description || ""}`}
+          content={`${alternative?.name || ""} - ${
+            alternative?.description || ""
+          }`}
         />
       </Head>
       <Header>
@@ -71,7 +74,7 @@ const RewritePage: NextPage = () => {
       <main className="grid min-h-screen grid-rows-[min-content_1fr]">
         <section className="grid h-full grid-cols-[1fr_minmax(0,800px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
           <section className="col-start-2 flex flex-col gap-4 py-8">
-            {!rewrite ? (
+            {!alternative ? (
               <>
                 <div className="h-8 w-28 animate-pulse rounded-sm bg-slate-500/80" />
                 <div className="h-8 w-[36rem] max-w-full animate-pulse rounded-sm bg-slate-500/80" />
@@ -80,19 +83,19 @@ const RewritePage: NextPage = () => {
             ) : (
               <>
                 <h1 className="text-2xl font-bold sm:text-3xl">
-                  {rewrite.name}
+                  {alternative.name}
                 </h1>
                 <h2 className="text-lg font-light sm:text-xl">
-                  {rewrite.description
+                  {alternative.description
                     .split(
                       new RegExp(
-                        `(${rewrite.of.map((s) => s.name).join(")|(")})`,
+                        `(${alternative.of.map((s) => s.name).join(")|(")})`,
                         "gi"
                       )
                     )
                     .filter(Boolean)
                     .map((word, i) => {
-                      const software = rewrite.of.find(
+                      const software = alternative.of.find(
                         (s) => s.name.toLowerCase() === word.toLowerCase()
                       );
 
@@ -146,53 +149,53 @@ const RewritePage: NextPage = () => {
                     })}
                 </h2>
                 <div className="flex flex-wrap gap-4 text-slate-300/75">
-                  {rewrite.url && (
+                  {alternative.url && (
                     <a
-                      href={rewrite.url}
+                      href={alternative.url}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <ExternalLink className="h-5 w-5" aria-label="URL" />
-                      <span>{formatUrl(rewrite.url)}</span>
+                      <span>{formatUrl(alternative.url)}</span>
                     </a>
                   )}
-                  {rewrite.github && (
+                  {alternative.github && (
                     <a
-                      href={rewrite.github}
+                      href={alternative.github}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Github className="h-5 w-5" aria-label="GitHub" />
-                      <span>{formatGithubUrl(rewrite.github)}</span>
+                      <span>{formatGithubUrl(alternative.github)}</span>
                     </a>
                   )}
-                  {rewrite.gitlab && (
+                  {alternative.gitlab && (
                     <a
-                      href={rewrite.gitlab}
+                      href={alternative.gitlab}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Gitlab className="h-5 w-5" aria-label="GitLab" />
-                      <span>{formatGitlabUrl(rewrite.gitlab)}</span>
+                      <span>{formatGitlabUrl(alternative.gitlab)}</span>
                     </a>
                   )}
-                  {rewrite.crates && (
+                  {alternative.crates && (
                     <a
-                      href={rewrite.crates}
+                      href={alternative.crates}
                       target="_blank"
                       rel="noreferrer"
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Box className="h-5 w-5" aria-label="crates.io" />
-                      <span>{formatCratesUrl(rewrite.crates)}</span>
+                      <span>{formatCratesUrl(alternative.crates)}</span>
                     </a>
                   )}
                   <div className="flex items-center gap-1">
                     <Flame className="h-5 w-5" aria-hidden />
-                    <span>{rewrite.views} views</span>
+                    <span>{alternative.views} views</span>
                   </div>
                 </div>
               </>
@@ -201,7 +204,7 @@ const RewritePage: NextPage = () => {
         </section>
         <section className="min-h-full w-screen bg-slate-300 p-6 sm:p-12">
           <div className="prose prose-slate mx-auto max-w-3xl">
-            {rewrite && !rewrite.github && <p>No README found.</p>}
+            {alternative && !alternative.github && <p>No README found.</p>}
             {readme.isFetching ? (
               <Loader2
                 className="mx-auto h-10 w-10 animate-spin"
@@ -222,4 +225,4 @@ const RewritePage: NextPage = () => {
   );
 };
 
-export default RewritePage;
+export default AlternativePage;

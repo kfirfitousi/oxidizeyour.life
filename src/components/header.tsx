@@ -15,7 +15,7 @@ export function Header({ children }: HeaderProps) {
       <nav className="mx-auto flex max-w-5xl items-center justify-between">
         <Link
           href="/"
-          className="text-lg font-bold hover:text-slate-100 sm:text-2xl"
+          className="font-bold hover:text-slate-100 xs:text-lg sm:text-2xl"
         >
           oxidizeyour.life
         </Link>

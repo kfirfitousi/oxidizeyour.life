@@ -20,7 +20,7 @@ type SearchBoxProps = {
 };
 
 export function SearchBox({ small }: SearchBoxProps) {
-  const rewritesList = api.rewrites.getList.useQuery();
+  const alternativesList = api.alternatives.getList.useQuery();
   const [input, setInput] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -31,8 +31,8 @@ export function SearchBox({ small }: SearchBoxProps) {
         small ? "max-w-lg" : "max-w-xl",
         small && !isFocused && "max-w-xs",
         small &&
-        isFocused &&
-        "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
+          isFocused &&
+          "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
       )}
     >
       <CommandInput
@@ -52,18 +52,18 @@ export function SearchBox({ small }: SearchBoxProps) {
         >
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup>
-            {rewritesList.data?.map((rewrite) => (
-              <Link href={`/${rewrite.name}`} key={rewrite.name}>
+            {alternativesList.data?.map((alternative) => (
+              <Link href={`/${alternative.name}`} key={alternative.name}>
                 <CommandItem className="grid cursor-pointer grid-cols-[min-content_1fr_max-content] max-xs:grid-cols-1 max-xs:grid-rows-[min-content_1fr_min-content]">
                   <div className="flex items-center gap-1 place-self-start text-slate-700 max-xs:pb-1">
                     <Cog className="h-5 w-5" />
-                    <span className="font-semibold">{rewrite.name}</span>
+                    <span className="font-semibold">{alternative.name}</span>
                   </div>
                   <span className="pl-1 font-light text-slate-600 xs:px-2">
-                    {rewrite.description}
+                    {alternative.description}
                   </span>
                   <span className="ml-auto place-self-start font-semibold text-slate-700">
-                    {rewrite.of.map((s) => s.name).join(", ")}
+                    {alternative.of.map((s) => s.name).join(", ")}
                   </span>
                 </CommandItem>
               </Link>

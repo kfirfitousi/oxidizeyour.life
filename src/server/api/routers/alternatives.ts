@@ -6,7 +6,7 @@ import {
   protectedProcedure,
 } from "@/server/api/trpc";
 
-export const rewritesRouter = createTRPCRouter({
+export const alternativesRouter = createTRPCRouter({
   getList: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.rewrite.findMany({
       select: {

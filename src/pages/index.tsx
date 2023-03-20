@@ -52,7 +52,7 @@ const Home: NextPage = () => {
         </section>
         <Tabs
           defaultValue="popular"
-          className="mx-auto max-w-5xl p-4 py-8 sm:px-0"
+          className="mx-auto w-full max-w-5xl p-4 py-8 sm:px-0"
         >
           <TabsList>
             <TabsTrigger value="popular">Popular</TabsTrigger>

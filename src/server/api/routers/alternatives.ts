@@ -16,35 +16,66 @@ export const alternativesRouter = createTRPCRouter({
       },
     });
   }),
-  getPopular: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.rewrite.findMany({
-      orderBy: {
-        views: "desc",
-      },
-      take: 8,
-      include: {
-        of: true,
-      },
-    });
-  }),
-  getNewest: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.rewrite.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 8,
-      include: {
-        of: true,
-      },
-    });
-  }),
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.rewrite.findMany({
-      include: {
-        of: true,
-      },
-    });
-  }),
+  getPopular: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).optional(),
+        cursor: z.string().nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 8;
+      const { cursor } = input;
+      const items = await ctx.prisma.rewrite.findMany({
+        take: limit + 1,
+        cursor: cursor ? { name: cursor } : undefined,
+        orderBy: { views: "desc" },
+        include: { of: true },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        nextCursor = nextItem!.name;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
+  getNewest: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).optional(),
+        cursor: z.string().nullish(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const limit = input.limit ?? 8;
+      const { cursor } = input;
+      const items = await ctx.prisma.rewrite.findMany({
+        take: limit + 1,
+        cursor: cursor ? { name: cursor } : undefined,
+        orderBy: { createdAt: "desc" },
+        include: { of: true },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+
+      if (items.length > limit) {
+        const nextItem = items.pop();
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        nextCursor = nextItem!.name;
+      }
+
+      return {
+        items,
+        nextCursor,
+      };
+    }),
   getOne: publicProcedure
     .input(
       z.object({
@@ -86,7 +117,7 @@ export const alternativesRouter = createTRPCRouter({
         name: z.string(),
         description: z.string(),
         url: z.string().optional(),
-        github: z.string(),
+        github: z.string().optional(),
         gitlab: z.string().optional(),
         crates: z.string().optional(),
       })

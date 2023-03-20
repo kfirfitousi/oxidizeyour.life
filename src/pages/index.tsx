@@ -1,18 +1,32 @@
+import React from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { Loader2 } from "lucide-react";
 
 import {
   AlternativeCard,
   AlternativeCardSkeleton,
 } from "@/components/alternative-card";
+import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const popular = api.alternatives.getPopular.useQuery();
-  const newest = api.alternatives.getNewest.useQuery();
+  const popular = api.alternatives.getPopular.useInfiniteQuery(
+    { limit: 8 },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  const newest = api.alternatives.getNewest.useInfiniteQuery(
+    { limit: 8 },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
 
   return (
     <>
@@ -36,42 +50,79 @@ const Home: NextPage = () => {
             <SearchBox />
           </section>
         </section>
-        <section className="bg-slate-300 p-6 sm:p-8">
-          <Tabs defaultValue="popular" className="mx-auto max-w-5xl">
-            <TabsList>
-              <TabsTrigger value="popular">Popular</TabsTrigger>
-              <TabsTrigger value="newest">New</TabsTrigger>
-            </TabsList>
-            <TabsContent value="popular" className="border-none p-0">
+        <Tabs
+          defaultValue="popular"
+          className="mx-auto max-w-5xl p-4 py-8 sm:px-0"
+        >
+          <TabsList>
+            <TabsTrigger value="popular">Popular</TabsTrigger>
+            <TabsTrigger value="newest">New</TabsTrigger>
+          </TabsList>
+          <TabsContent value="popular" className="border-none p-0">
+            <section className="flex flex-col gap-4">
               <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {popular.data
-                  ? popular.data?.map((alternative) => (
-                      <AlternativeCard
-                        alternative={alternative}
-                        key={alternative.name}
-                      />
+                {popular.status === "success"
+                  ? popular.data.pages.map((group, i) => (
+                      <React.Fragment key={i}>
+                        {group.items.map((alternative) => (
+                          <AlternativeCard
+                            alternative={alternative}
+                            key={alternative.name}
+                          />
+                        ))}
+                      </React.Fragment>
                     ))
                   : Array.from({ length: 8 }, (_, i) => (
                       <AlternativeCardSkeleton key={i} />
                     ))}
               </div>
-            </TabsContent>
-            <TabsContent value="newest" className="border-none p-0">
+              <Button
+                className="mx-auto w-full max-w-xs text-slate-700"
+                variant="ghost"
+                onClick={() => void popular.fetchNextPage()}
+                disabled={!popular.hasNextPage || popular.isFetchingNextPage}
+              >
+                {popular.isFetchingNextPage ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  "Load More"
+                )}
+              </Button>
+            </section>
+          </TabsContent>
+          <TabsContent value="newest" className=" border-none p-0">
+            <section className="flex flex-col gap-4">
               <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {newest.data
-                  ? newest.data?.map((alternative) => (
-                      <AlternativeCard
-                        alternative={alternative}
-                        key={alternative.name}
-                      />
+                {newest.status === "success"
+                  ? newest.data.pages.map((group, i) => (
+                      <React.Fragment key={i}>
+                        {group.items.map((alternative) => (
+                          <AlternativeCard
+                            alternative={alternative}
+                            key={alternative.name}
+                          />
+                        ))}
+                      </React.Fragment>
                     ))
                   : Array.from({ length: 8 }, (_, i) => (
                       <AlternativeCardSkeleton key={i} />
                     ))}
               </div>
-            </TabsContent>
-          </Tabs>
-        </section>
+              <Button
+                className="mx-auto w-fit text-slate-700"
+                variant="ghost"
+                onClick={() => void newest.fetchNextPage()}
+                disabled={!newest.hasNextPage || newest.isFetchingNextPage}
+              >
+                {newest.isFetchingNextPage ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  "Load More"
+                )}
+              </Button>
+            </section>
+          </TabsContent>
+        </Tabs>
       </main>
     </>
   );

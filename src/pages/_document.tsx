@@ -25,7 +25,7 @@ export default function Document() {
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <body>
+      <body className="bg-slate-300">
         <Main />
         <NextScript />
       </body>

@@ -202,7 +202,7 @@ const AlternativePage: NextPage = () => {
             )}
           </section>
         </section>
-        <section className="min-h-full w-screen bg-slate-300 p-6 sm:p-12">
+        <section className="min-h-full w-screen p-6 sm:p-12">
           <div className="prose prose-slate mx-auto max-w-3xl">
             {alternative && !alternative.github && <p>No README found.</p>}
             {readme.isFetching ? (

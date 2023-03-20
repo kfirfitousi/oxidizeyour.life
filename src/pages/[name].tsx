@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useEffect } from "react";
 import {
+  ArrowLeft,
   Box,
   ExternalLink,
   Flame,
@@ -25,11 +26,13 @@ import {
   formatUrl,
 } from "@/utils/format-url";
 import { api } from "@/utils/api";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const AlternativePage: NextPage = () => {
   const { query } = useRouter();
 
-  const { data: alternative } = api.alternatives.getOne.useQuery(
+  const { data: alternative, status } = api.alternatives.getOne.useQuery(
     {
       name: query.name as string,
     },
@@ -72,20 +75,34 @@ const AlternativePage: NextPage = () => {
         <SearchBox small />
       </Header>
       <main className="grid min-h-screen grid-rows-[min-content_1fr]">
-        <section className="grid h-full grid-cols-[1fr_minmax(0,800px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 text-slate-300 sm:px-12">
+        <section className="grid h-full grid-cols-[1fr_minmax(0,800px)_1fr] grid-rows-[min-content_1fr] bg-slate-700 px-6 sm:px-12">
           <section className="col-start-2 flex flex-col gap-4 py-8">
-            {!alternative ? (
+            {status === "loading" && (
               <>
                 <div className="h-8 w-28 animate-pulse rounded-sm bg-slate-500/80" />
                 <div className="h-8 w-[36rem] max-w-full animate-pulse rounded-sm bg-slate-500/80" />
                 <div className="h-6 w-96 animate-pulse rounded-sm bg-slate-400/80" />
               </>
-            ) : (
+            )}
+            {status === "success" && !alternative && (
               <>
-                <h1 className="text-2xl font-bold sm:text-3xl">
+                <div className="text-2xl font-semibold text-rose-300 sm:text-3xl">
+                  Couldn&apos;t find &quot;{query.name}&quot;
+                </div>
+                <Link href="/">
+                  <Button variant="ghost" className="w-fit text-rose-300">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Go to Homepage
+                  </Button>
+                </Link>
+              </>
+            )}
+            {status === "success" && alternative && (
+              <>
+                <h1 className="text-2xl font-bold text-slate-300 sm:text-3xl">
                   {alternative.name}
                 </h1>
-                <h2 className="text-lg font-light sm:text-xl">
+                <h2 className="text-lg font-light text-slate-300 sm:text-xl">
                   {alternative.description
                     .split(
                       new RegExp(

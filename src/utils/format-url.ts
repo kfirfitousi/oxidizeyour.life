@@ -1,11 +1,15 @@
-export const formatUrl = (url: string) =>
-  url.replace(/(https?:\/\/)?(www\.)?/, "");
-
-export const formatGithubUrl = (url: string) =>
-  url.replace(/(https?:\/\/)?(www)?\.?github\.com\//, "");
-
-export const formatGitlabUrl = (url: string) =>
-  url.replace(/(https?:\/\/)?(www)?\.?gitlab\.com\//, "");
-
-export const formatCratesUrl = (url: string) =>
-  url.replace(/(https?:\/\/)?(www)?\.?crates\.io\/crates\//, "");
+export function formatUrl(
+  url: string,
+  mode: "github" | "gitlab" | "crates" | "url" = "url"
+) {
+  switch (mode) {
+    case "github":
+      return url.replace(/(https?:\/\/)?(www)?\.?github\.com\//, "");
+    case "gitlab":
+      return url.replace(/(https?:\/\/)?(www)?\.?gitlab\.com\//, "");
+    case "crates":
+      return url.replace(/(https?:\/\/)?(www)?\.?crates\.io\/crates\//, "");
+    case "url":
+      return url.replace(/(https?:\/\/)?(www\.)?/, "");
+  }
+}

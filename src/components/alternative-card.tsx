@@ -1,22 +1,21 @@
+import type { Rewrite, Software } from "@prisma/client";
 import Link from "next/link";
 import { Github, ExternalLink, Box, Gitlab, ArrowRight } from "lucide-react";
 
-import type { Rewrite, Software } from "@prisma/client";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  formatCratesUrl,
-  formatGithubUrl,
-  formatGitlabUrl,
-  formatUrl,
-} from "@/utils/format-url";
+import { SoftwareHoverCard } from "@/components/software-hover-card";
+import { formatUrl } from "@/utils/format-url";
 
 type AlternativeCardProps = {
   alternative: Rewrite & { of: Software[] };
 };
+
+export function AlternativeCardSkeleton() {
+  return (
+    <div className="aspect-video w-full p-2 sm:aspect-square">
+      <div className="h-full animate-pulse rounded bg-slate-200" />
+    </div>
+  );
+}
 
 export function AlternativeCard({ alternative }: AlternativeCardProps) {
   return (
@@ -51,43 +50,9 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
               if (!software) return word;
 
               return (
-                <HoverCard key={i}>
-                  <HoverCardTrigger className="font-normal hover:underline">
-                    {word}
-                  </HoverCardTrigger>
-                  <HoverCardContent>
-                    <div className="flex flex-col text-slate-600">
-                      <div className="text-lg font-semibold">
-                        {software.name}
-                      </div>
-                      <div className="pb-2">{software.description}</div>
-                      {software.url && (
-                        <a
-                          href={software.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-slate-500 hover:underline"
-                        >
-                          <ExternalLink className="h-4 w-4" aria-label="URL" />
-                          <span className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                            {formatUrl(software.url)}
-                          </span>
-                        </a>
-                      )}
-                      {software.github && (
-                        <a
-                          href={software.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-slate-500 hover:underline"
-                        >
-                          <Github className="h-4 w-4" aria-label="GitHub" />
-                          <span>{formatGithubUrl(software.github)}</span>
-                        </a>
-                      )}
-                    </div>
-                  </HoverCardContent>
-                </HoverCard>
+                <SoftwareHoverCard key={i} software={software}>
+                  {word}
+                </SoftwareHoverCard>
               );
             })}
         </div>
@@ -111,7 +76,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
               className="flex items-center gap-1 hover:underline"
             >
               <Github className="h-4 w-4" aria-hidden />
-              <span>{formatGithubUrl(alternative.github)}</span>
+              <span>{formatUrl(alternative.github, "github")}</span>
             </a>
           )}
           {alternative.gitlab && (
@@ -122,7 +87,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
               className="flex items-center gap-1 hover:underline"
             >
               <Gitlab className="h-4 w-4" aria-hidden />
-              <span>{formatGitlabUrl(alternative.gitlab)}</span>
+              <span>{formatUrl(alternative.gitlab, "gitlab")}</span>
             </a>
           )}
           {alternative.crates && (
@@ -133,19 +98,11 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
               className="flex items-center gap-1 hover:underline"
             >
               <Box className="h-4 w-4" aria-hidden />
-              <span>{formatCratesUrl(alternative.crates)}</span>
+              <span>{formatUrl(alternative.crates, "crates")}</span>
             </a>
           )}
         </div>
       </div>
-    </div>
-  );
-}
-
-export function AlternativeCardSkeleton() {
-  return (
-    <div className="aspect-video w-full p-2 sm:aspect-square">
-      <div className="h-full animate-pulse rounded bg-slate-200" />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import Head from "next/head";
 import { useEffect } from "react";
 import {
@@ -12,22 +13,12 @@ import {
   Loader2,
 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { SearchBox } from "@/components/search-box";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  formatCratesUrl,
-  formatGithubUrl,
-  formatGitlabUrl,
-  formatUrl,
-} from "@/utils/format-url";
+import { SoftwareHoverCard } from "@/components/software-hover-card";
 import { api } from "@/utils/api";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { formatUrl } from "@/utils/format-url";
 
 const AlternativePage: NextPage = () => {
   const { query } = useRouter();
@@ -119,49 +110,9 @@ const AlternativePage: NextPage = () => {
                       if (!software) return word;
 
                       return (
-                        <HoverCard key={i}>
-                          <HoverCardTrigger className="font-normal hover:underline">
-                            {word}
-                          </HoverCardTrigger>
-                          <HoverCardContent>
-                            <div className="flex flex-col text-base text-slate-600">
-                              <div className="text-lg font-semibold">
-                                {software.name}
-                              </div>
-                              <div className="pb-2">{software.description}</div>
-                              {software.url && (
-                                <a
-                                  href={software.url}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex gap-1 text-slate-500 hover:underline"
-                                >
-                                  <ExternalLink
-                                    className="h-5 w-5"
-                                    aria-label="URL"
-                                  />
-                                  <span>{formatUrl(software.url)}</span>
-                                </a>
-                              )}
-                              {software.github && (
-                                <a
-                                  href={software.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex gap-1 text-slate-500 hover:underline"
-                                >
-                                  <Github
-                                    className="h-5 w-5"
-                                    aria-label="GitHub"
-                                  />
-                                  <span>
-                                    {formatGithubUrl(software.github)}
-                                  </span>
-                                </a>
-                              )}
-                            </div>
-                          </HoverCardContent>
-                        </HoverCard>
+                        <SoftwareHoverCard key={i} software={software}>
+                          {word}
+                        </SoftwareHoverCard>
                       );
                     })}
                 </h2>
@@ -185,7 +136,7 @@ const AlternativePage: NextPage = () => {
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Github className="h-5 w-5" aria-label="GitHub" />
-                      <span>{formatGithubUrl(alternative.github)}</span>
+                      <span>{formatUrl(alternative.github, "github")}</span>
                     </a>
                   )}
                   {alternative.gitlab && (
@@ -196,7 +147,7 @@ const AlternativePage: NextPage = () => {
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Gitlab className="h-5 w-5" aria-label="GitLab" />
-                      <span>{formatGitlabUrl(alternative.gitlab)}</span>
+                      <span>{formatUrl(alternative.gitlab, "gitlab")}</span>
                     </a>
                   )}
                   {alternative.crates && (
@@ -207,7 +158,7 @@ const AlternativePage: NextPage = () => {
                       className="flex items-center gap-1 hover:text-slate-100 hover:underline"
                     >
                       <Box className="h-5 w-5" aria-label="crates.io" />
-                      <span>{formatCratesUrl(alternative.crates)}</span>
+                      <span>{formatUrl(alternative.crates, "crates")}</span>
                     </a>
                   )}
                   <div className="flex items-center gap-1">

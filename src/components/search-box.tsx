@@ -31,8 +31,8 @@ export function SearchBox({ small }: SearchBoxProps) {
         small ? "max-w-lg" : "max-w-xl",
         small && !isFocused && "max-w-xs",
         small &&
-          isFocused &&
-          "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
+        isFocused &&
+        "max-xs:absolute max-xs:left-1/2 max-xs:top-4 max-xs:h-fit max-xs:w-[90%] max-xs:-translate-x-1/2"
       )}
     >
       <CommandInput
@@ -63,7 +63,7 @@ export function SearchBox({ small }: SearchBoxProps) {
                     {alternative.description}
                   </span>
                   <span className="ml-auto place-self-start font-semibold text-slate-700">
-                    {alternative.of.map((s) => s.name).join(", ")}
+                    {alternative.to.map((s) => s.name).join(", ")}
                   </span>
                 </CommandItem>
               </Link>

@@ -8,11 +8,11 @@ import {
 
 export const alternativesRouter = createTRPCRouter({
   getList: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.rewrite.findMany({
+    return ctx.prisma.alternative.findMany({
       select: {
         name: true,
         description: true,
-        of: true,
+        to: true,
       },
     });
   }),
@@ -26,11 +26,11 @@ export const alternativesRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 8;
       const { cursor } = input;
-      const items = await ctx.prisma.rewrite.findMany({
+      const items = await ctx.prisma.alternative.findMany({
         take: limit + 1,
         cursor: cursor ? { name: cursor } : undefined,
         orderBy: { views: "desc" },
-        include: { of: true },
+        include: { to: true },
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
@@ -56,11 +56,11 @@ export const alternativesRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 8;
       const { cursor } = input;
-      const items = await ctx.prisma.rewrite.findMany({
+      const items = await ctx.prisma.alternative.findMany({
         take: limit + 1,
         cursor: cursor ? { name: cursor } : undefined,
         orderBy: { createdAt: "desc" },
-        include: { of: true },
+        include: { to: true },
       });
 
       let nextCursor: typeof cursor | undefined = undefined;
@@ -83,12 +83,12 @@ export const alternativesRouter = createTRPCRouter({
       })
     )
     .query(({ ctx, input }) => {
-      return ctx.prisma.rewrite.findUnique({
+      return ctx.prisma.alternative.findUnique({
         where: {
           name: input.name,
         },
         include: {
-          of: true,
+          to: true,
         },
       });
     }),
@@ -99,7 +99,7 @@ export const alternativesRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.rewrite.update({
+      return ctx.prisma.alternative.update({
         where: {
           name: input.name,
         },
@@ -123,7 +123,7 @@ export const alternativesRouter = createTRPCRouter({
       })
     )
     .mutation(({ ctx, input }) => {
-      return ctx.prisma.rewrite.create({
+      return ctx.prisma.alternative.create({
         data: {
           name: input.name,
           description: input.description,
@@ -131,12 +131,101 @@ export const alternativesRouter = createTRPCRouter({
           github: input.github,
           gitlab: input.gitlab,
           crates: input.crates,
-          of: {
+          to: {
             connect: {
               name: input.of,
             },
           },
         },
       });
+    }),
+  update: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        url: z.string().optional(),
+        github: z.string().optional(),
+        gitlab: z.string().optional(),
+        crates: z.string().optional(),
+      })
+    )
+    .mutation(({ ctx, input }) => {
+      return ctx.prisma.alternative.update({
+        where: {
+          name: input.name,
+        },
+        data: {
+          description: input.description,
+          url: input.url,
+          github: input.github,
+          gitlab: input.gitlab,
+          crates: input.crates,
+        },
+      });
+    }),
+  addToFavorites: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const alternative = await ctx.prisma.alternative.findUnique({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!alternative) {
+        return false;
+      }
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          favorites: {
+            connect: {
+              name: input.name,
+            },
+          },
+        },
+      });
+
+      return true;
+    }),
+  removeFromFavorites: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const alternative = await ctx.prisma.alternative.findUnique({
+        where: {
+          name: input.name,
+        },
+      });
+
+      if (!alternative) {
+        return false;
+      }
+
+      await ctx.prisma.user.update({
+        where: {
+          id: ctx.session.user.id,
+        },
+        data: {
+          favorites: {
+            disconnect: {
+              name: input.name,
+            },
+          },
+        },
+      });
+
+      return true;
     }),
 });

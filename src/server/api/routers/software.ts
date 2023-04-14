@@ -29,7 +29,7 @@ export const softwareRouter = createTRPCRouter({
           name: input.name,
         },
         include: {
-          rewrites: true,
+          alternatives: true,
         },
       });
     }),
@@ -56,7 +56,7 @@ export const softwareRouter = createTRPCRouter({
     .input(
       z.object({
         software: z.string(),
-        rewrite: z.string(),
+        alternative: z.string(),
       })
     )
     .mutation(({ ctx, input }) => {
@@ -65,14 +65,14 @@ export const softwareRouter = createTRPCRouter({
           name: input.software,
         },
         data: {
-          rewrites: {
+          alternatives: {
             connect: {
-              name: input.rewrite,
+              name: input.alternative,
             },
           },
         },
         include: {
-          rewrites: true,
+          alternatives: true,
         },
       });
     }),

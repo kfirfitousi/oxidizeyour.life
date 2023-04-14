@@ -43,13 +43,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  favorites     Alternative[]
 }
 
 model VerificationToken {
@@ -61,15 +62,33 @@ model VerificationToken {
 }
 
 model Software {
-  name        String    @id
+  name         String        @id
+  description  String
+  url          String?
+  github       String?
+  gitlab       String?
+  rewrites     Rewrite[] // deprecated
+  alternatives Alternative[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Alternative {
+  name        String     @id
   description String
   url         String?
   github      String?
-  rewrites    Rewrite[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  gitlab      String?
+  crates      String?
+  to          Software[]
+  favoritedBy User[]
+  views       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
+// This model is deprecated and will be removed in the future.
+// Use the Alternative model instead.
 model Rewrite {
   name        String     @id
   description String

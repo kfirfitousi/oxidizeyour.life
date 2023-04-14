@@ -57,9 +57,8 @@ const AlternativePage: NextPage = () => {
         <title>Oxidize Your Life - {alternative?.name}</title>
         <meta
           name="description"
-          content={`${alternative?.name || ""} - ${
-            alternative?.description || ""
-          }`}
+          content={`${alternative?.name || ""} - ${alternative?.description || ""
+            }`}
         />
       </Head>
       <Header>
@@ -97,13 +96,13 @@ const AlternativePage: NextPage = () => {
                   {alternative.description
                     .split(
                       new RegExp(
-                        `(${alternative.of.map((s) => s.name).join(")|(")})`,
+                        `(${alternative.to.map((s) => s.name).join(")|(")})`,
                         "gi"
                       )
                     )
                     .filter(Boolean)
                     .map((word, i) => {
-                      const software = alternative.of.find(
+                      const software = alternative.to.find(
                         (s) => s.name.toLowerCase() === word.toLowerCase()
                       );
 

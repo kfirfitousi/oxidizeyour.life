@@ -6,7 +6,7 @@ import { SoftwareHoverCard } from "@/components/software-hover-card";
 import { formatUrl } from "@/utils/format-url";
 
 type AlternativeCardProps = {
-  alternative: Rewrite & { of: Software[] };
+  alternative: Rewrite & { to: Software[] };
 };
 
 export function AlternativeCardSkeleton() {
@@ -37,13 +37,13 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
           {alternative.description
             .split(
               new RegExp(
-                `(${alternative.of.map((s) => s.name).join(")|(")})`,
+                `(${alternative.to.map((s) => s.name).join(")|(")})`,
                 "gi"
               )
             )
             .filter(Boolean)
             .map((word, i) => {
-              const software = alternative.of.find(
+              const software = alternative.to.find(
                 (s) => s.name.toLowerCase() === word.toLowerCase()
               );
 
